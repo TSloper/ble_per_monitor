@@ -31,7 +31,6 @@ class BleService {
   StreamSubscription<BluetoothConnectionState>? _connectionSubscription;
   StreamSubscription<List<ScanResult>>? _scanSubscription;
   Timer? _reconnectTimer;
-  Timer? _keepAliveTimer;
   int _reconnectAttempts = 0;
   bool _userInitiatedDisconnect = false;
 
@@ -215,9 +214,6 @@ class BleService {
       // Read initial parameters
       await _readAllParameters();
 
-      // Start keep-alive timer to prevent connection timeout
-      _startKeepAlive();
-
       // Update state
       _updateConnectionState(BleConnectionState.connected);
     } on TimeoutException {
@@ -297,10 +293,6 @@ class BleService {
 
   /// Clean up connection resources
   void _cleanupConnection() {
-    // Cancel timers
-    _keepAliveTimer?.cancel();
-    _keepAliveTimer = null;
-
     // Cancel subscriptions
     _connectionSubscription?.cancel();
     _connectionSubscription = null;
@@ -315,23 +307,6 @@ class BleService {
 
     // Clear service reference
     _perService = null;
-  }
-
-  /// Start keep-alive timer to prevent connection timeout
-  void _startKeepAlive() {
-    _keepAliveTimer?.cancel();
-    // Periodically read RSSI to keep connection active
-    _keepAliveTimer = Timer.periodic(const Duration(seconds: 10), (timer) async {
-      if (_connectionState == BleConnectionState.connected) {
-        try {
-          // Read a lightweight characteristic to keep connection alive
-          await readCharacteristic(BleUuids.rssiUuid);
-        } catch (e) {
-          // Ignore errors - this is just for keep-alive
-          print('Keep-alive read failed: $e');
-        }
-      }
-    });
   }
 
   /// Discover PER service and characteristics
