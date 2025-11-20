@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10">
+
+  <Identity Name="BlePerMonitor"
+            Publisher="CN=Publisher"
+            Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>BLE PER Monitor</DisplayName>
+    <PublisherDisplayName>Publisher</PublisherDisplayName>
+    <Logo>resources\app_icon.ico</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22000.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <Application Id="BlePerMonitor"
+                 Executable="ble_per_monitor.exe"
+                 EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="BLE PER Monitor"
+        Description="BLE PER (Packet Error Rate) Monitor - A professional monitoring client for Bluetooth Low Energy packet statistics."
+        BackgroundColor="#0078D4"
+        Square150x150Logo="resources\app_icon.ico"
+        Square44x44Logo="resources\app_icon.ico">
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <DeviceCapability Name="bluetooth" />
+    <DeviceCapability Name="bluetooth.genericAttributeProfile">
+      <Device Id="any">
+        <Function Type="name:genericAttributeProfile" />
+      </Device>
+    </DeviceCapability>
+    <DeviceCapability Name="bluetooth.rfcomm">
+      <Device Id="any">
+        <Function Type="name:rfcomm" />
+      </Device>
+    </DeviceCapability>
+  </Capabilities>
+</Package>
