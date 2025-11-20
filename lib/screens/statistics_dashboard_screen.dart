@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../models/per_device.dart';
 import '../models/per_statistics.dart';
 import '../services/ble_service.dart';
@@ -39,6 +40,7 @@ class _StatisticsDashboardScreenState extends State<StatisticsDashboardScreen>
   bool _isTestRunning = false;
   bool _isTogglingTest = false;
   late AnimationController _pulseController;
+  String _appVersion = '';
 
   // Number formatter
   final _numberFormatter = NumberFormat('#,###');
@@ -51,9 +53,18 @@ class _StatisticsDashboardScreenState extends State<StatisticsDashboardScreen>
       duration: const Duration(milliseconds: 1000),
     )..repeat(reverse: true);
 
+    _loadAppVersion();
     _subscribeToUpdates();
     // Note: _isTestRunning will be set automatically when statistics stream
     // provides the initial test status from the device
+  }
+
+  /// Load app version from package info
+  Future<void> _loadAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = packageInfo.version;
+    });
   }
 
   @override
@@ -313,6 +324,18 @@ class _StatisticsDashboardScreenState extends State<StatisticsDashboardScreen>
                   // Quick Actions
                   _buildQuickActions(colorScheme),
                   const SizedBox(height: 16),
+
+                  // Version footer
+                  if (_appVersion.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        'v$_appVersion',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurface.withValues(alpha: 0.5),
+                            ),
+                      ),
+                    ),
                 ],
               ),
             ),

@@ -179,7 +179,7 @@ class _DeviceScanScreenState extends State<DeviceScanScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LR11xx PER Monitor'),
+        title: const Text('BLE PER Monitor'),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
