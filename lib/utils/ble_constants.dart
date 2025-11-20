@@ -2,26 +2,27 @@ import 'dart:typed_data';
 import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 
 /// BLE service and characteristic UUIDs matching Zephyr device implementation
+/// Updated to use full 128-bit custom UUIDs
 class BleUuids {
   // Service UUID
-  static const String serviceUuid = '00001900-0000-1000-8000-00805f9b34fb';
+  static const String serviceUuid = '19001900-9119-4719-b419-190019001900';
 
   // Read-Only Characteristics (Read + Notify)
-  static const String rxPacketsUuid = '00001901-0000-1000-8000-00805f9b34fb';
-  static const String perUuid = '00001903-0000-1000-8000-00805f9b34fb';
-  static const String rssiUuid = '00001904-0000-1000-8000-00805f9b34fb';
-  static const String snrUuid = '00001905-0000-1000-8000-00805f9b34fb';
-  static const String testStatusUuid = '00001906-0000-1000-8000-00805f9b34fb';
+  static const String rxPacketsUuid = '19011901-9119-4719-b419-010119011901';
+  static const String perUuid = '19031903-9119-4719-b419-030319031903';
+  static const String rssiUuid = '19041904-9119-4719-b419-040419041904';
+  static const String snrUuid = '19051905-9119-4719-b419-050519051905';
+  static const String testStatusUuid = '19061906-9119-4719-b419-060619061906';
 
-  // Configuration Characteristics (Read, Write)
-  static const String frequencyUuid = '00001910-0000-1000-8000-00805f9b34fb';
-  static const String spreadingFactorUuid = '00001911-0000-1000-8000-00805f9b34fb';
-  static const String bandwidthUuid = '00001912-0000-1000-8000-00805f9b34fb';
-  static const String txPowerUuid = '00001913-0000-1000-8000-00805f9b34fb';
+  // Configuration Characteristics (Read + Write)
+  static const String frequencyUuid = '19101910-9119-4719-b419-101019101910';
+  static const String spreadingFactorUuid = '19111911-9119-4719-b419-111119111911';
+  static const String bandwidthUuid = '19121912-9119-4719-b419-121219121912';
+  static const String txPowerUuid = '19131913-9119-4719-b419-131319131913';
 
-  // Control Characteristics (Write)
-  static const String resetStatsUuid = '00001920-0000-1000-8000-00805f9b34fb';
-  static const String testControlUuid = '00001921-0000-1000-8000-00805f9b34fb';
+  // Control Characteristics
+  static const String resetStatsUuid = '19201920-9119-4719-b419-202019201920'; // Write
+  static const String testControlUuid = '19211921-9119-4719-b419-212119211921'; // Read + Write
 
   /// Convert UUID string to Guid for flutter_blue_plus
   static Guid toGuid(String uuid) => Guid(uuid);
