@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/per_device.dart';
 import '../services/ble_service.dart';
+import '../utils/ble_constants.dart';
 
 /// Screen for scanning and discovering BLE devices
 class DeviceScanScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _DeviceScanScreenState extends State<DeviceScanScreen>
   Timer? _staleDeviceTimer;
   Timer? _buttonDebounceTimer;
   late AnimationController _scanAnimationController;
+  StreamSubscription<BleConnectionState>? _connectionStateSubscription;
 
   @override
   void initState() {
@@ -29,6 +31,18 @@ class _DeviceScanScreenState extends State<DeviceScanScreen>
       duration: const Duration(seconds: 2),
     )..repeat();
     _startStaleDeviceTimer();
+    _listenToConnectionState();
+  }
+
+  /// Listen to BLE service connection state changes
+  void _listenToConnectionState() {
+    _connectionStateSubscription = _bleService.connectionStateStream.listen((state) {
+      if (mounted) {
+        setState(() {
+          _isScanning = state == BleConnectionState.scanning;
+        });
+      }
+    });
   }
 
   @override
@@ -36,6 +50,7 @@ class _DeviceScanScreenState extends State<DeviceScanScreen>
     _scanAnimationController.dispose();
     _staleDeviceTimer?.cancel();
     _buttonDebounceTimer?.cancel();
+    _connectionStateSubscription?.cancel();
     if (_isScanning) {
       _bleService.stopScan();
     }

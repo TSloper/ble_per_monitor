@@ -30,6 +30,7 @@ class BleService {
   BleConnectionState _connectionState = BleConnectionState.disconnected;
   StreamSubscription<BluetoothConnectionState>? _connectionSubscription;
   StreamSubscription<List<ScanResult>>? _scanSubscription;
+  StreamSubscription<bool>? _scanStateSubscription;
   Timer? _reconnectTimer;
   int _reconnectAttempts = 0;
   bool _userInitiatedDisconnect = false;
@@ -134,6 +135,13 @@ class BleService {
           _handleError(BleErrorMessages.scanFailed, error);
         },
       );
+
+      // Listen to scan state to update UI when scan stops automatically
+      _scanStateSubscription = FlutterBluePlus.isScanning.listen((isScanning) {
+        if (!isScanning && _connectionState == BleConnectionState.scanning) {
+          _updateConnectionState(BleConnectionState.disconnected);
+        }
+      });
     } catch (e) {
       _handleError(BleErrorMessages.scanFailed, e);
       rethrow;
@@ -168,6 +176,8 @@ class BleService {
       await FlutterBluePlus.stopScan();
       await _scanSubscription?.cancel();
       _scanSubscription = null;
+      await _scanStateSubscription?.cancel();
+      _scanStateSubscription = null;
 
       if (_connectionState == BleConnectionState.scanning) {
         _updateConnectionState(BleConnectionState.disconnected);
@@ -810,6 +820,7 @@ class BleService {
   void dispose() {
     _reconnectTimer?.cancel();
     _scanSubscription?.cancel();
+    _scanStateSubscription?.cancel();
     _connectionSubscription?.cancel();
     _cleanupConnection();
 
