@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
+import 'package:ble_per_monitor/services/ble_platform/ble_platform.dart';
 
 /// BLE service and characteristic UUIDs matching Zephyr device implementation
 /// Updated to use full 128-bit custom UUIDs

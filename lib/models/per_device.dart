@@ -1,4 +1,4 @@
-import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
+import 'package:ble_per_monitor/services/ble_platform/ble_platform.dart';
 import '../utils/ble_constants.dart';
 
 /// Represents a discovered or connected LR11xx PER device

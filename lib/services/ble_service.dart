@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
+import 'package:ble_per_monitor/services/ble_platform/ble_platform.dart';
 import '../models/per_device.dart';
 import '../models/per_statistics.dart';
 import '../models/radio_parameters.dart';
@@ -110,6 +110,15 @@ class BleService {
       _discoveredDevices.clear();
       _scanResultsController.add([]);
 
+      // Wait for Bluetooth adapter to be ready (important for iOS)
+      await FlutterBluePlus.adapterState
+          .where((state) => state == BluetoothAdapterState.on)
+          .first
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw BleException(BleErrorMessages.bluetoothOff),
+          );
+
       // Start scan
       await FlutterBluePlus.startScan(
         timeout: BleConfig.scanTimeout,
@@ -201,6 +210,7 @@ class BleService {
 
       // Connect with timeout
       await bluetoothDevice.connect(
+        license: License.free, // Using free license (individuals, nonprofits, educational, <50 employees)
         timeout: BleConfig.connectionTimeout,
         autoConnect: false,
       );

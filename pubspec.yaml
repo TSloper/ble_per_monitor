@@ -37,10 +37,13 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # BLE functionality
-  # Note: Windows BLE support is not currently available due to flutter_blue_plus_windows compatibility issues
-  # For Windows development, please use Android or iOS emulator/device
-  #flutter_blue_plus: ^1.32.0
-  flutter_blue_plus_windows: ^1.26.1
+  # Use flutter_blue_plus for iOS/Android/macOS (version >= 2.0.0)
+  # OR flutter_blue_plus_windows for Windows (uses older flutter_blue_plus 1.32.x)
+  # NOTE: These packages cannot coexist due to version conflicts
+  # For iOS builds, use flutter_blue_plus
+  # For Windows builds, use flutter_blue_plus_windows
+  flutter_blue_plus: '>=2.0.0'
+  # flutter_blue_plus_windows: ^1.26.1  # Uncomment for Windows builds
   
   # State management
   provider: ^6.1.0
